@@ -4,12 +4,12 @@ export default function TermsPage() {
   return (
     <div className="space-y-5">
       <PageHeader
-        eyebrow="Plate Margin"
+        eyebrow="Kitchen Profit Calculator"
         title="Terms & Conditions"
-        lede="Plate Margin is a kitchen tool that runs in your browser. You decide which prices and recipes go into it."
+        lede="Kitchen Profit Calculator is a kitchen tool that runs in your browser. You decide which prices and recipes go into it."
       />
       <article className="card space-y-4 p-6 text-sm leading-relaxed text-ink-soft">
-        <p>By using Plate Margin you agree to these terms for this local copy of the app.</p>
+        <p>By using Kitchen Profit Calculator you agree to these terms for this local copy of the app.</p>
         <h2 className="font-sora text-xl text-cream">Your kitchen data</h2>
         <p>
           You are responsible for the ingredients, recipes, invoices, and prices you enter or upload. Check a supplier invoice before you rely on a price. Uploaded files update matching ingredients and add new names automatically.

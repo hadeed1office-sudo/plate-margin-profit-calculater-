@@ -73,7 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   const attention = metrics?.alerts.filter((alert) => alert.severity !== "healthy") ?? [];
-  const title = TITLES[pathname] ?? "Plate Margin";
+  const title = TITLES[pathname] ?? "Kitchen Profit Calculator";
 
   const hits = useMemo(() => {
     if (!kitchen || query.trim().length < 1) return [];
@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-3 px-5 pb-2 pt-6">
           <Mark className="h-10 w-10" />
           <div>
-            <p className="font-sora text-lg font-semibold leading-none tracking-tight text-cream">Plate Margin</p>
+            <p className="font-sora text-sm font-semibold leading-tight tracking-tight text-cream">Kitchen Profit Calculator</p>
             <p className="mt-1 text-xs text-muted">{kitchen.profile.name}</p>
           </div>
         </div>
@@ -170,7 +170,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </span>
             </button>
             <div className="min-w-0">
-              <p className="text-xs text-muted">Plate Margin</p>
+              <p className="text-xs text-muted">Kitchen Profit Calculator</p>
               <p className="truncate font-sora text-base font-semibold tracking-tight text-cream md:text-lg">{title}</p>
             </div>
             <div className="relative ml-auto hidden min-w-0 flex-1 md:block md:max-w-sm">

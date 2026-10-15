@@ -21,7 +21,7 @@ export function AuthFrame({
         <div className="absolute inset-0 bg-gradient-to-t from-[#07100C] via-[#07100C]/75 to-[#07100C]/35" />
         <Link href="/" className="relative z-10 flex items-center gap-3">
           <Mark className="h-11 w-11" />
-          <span className="font-sora text-2xl font-semibold tracking-tight text-cream">Plate Margin</span>
+          <span className="font-sora text-2xl font-semibold leading-tight tracking-tight text-cream">Kitchen Profit Calculator</span>
         </Link>
         <div className="relative z-10">
           <p className="eyebrow">Kitchen profit</p>
@@ -41,7 +41,7 @@ export function AuthFrame({
         <div className="w-full max-w-md rounded-2xl border border-line bg-card p-6 shadow-card md:p-8">
           <Link href="/" className="mb-8 flex items-center gap-2 lg:hidden">
             <Mark className="h-9 w-9" />
-            <span className="text-xl font-semibold">Plate Margin</span>
+            <span className="text-xl font-semibold leading-tight">Kitchen Profit Calculator</span>
           </Link>
           <h1 className="font-sora text-[1.75rem] font-semibold tracking-tight text-cream">{title}</h1>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">{lede}</p>

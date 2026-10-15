@@ -244,7 +244,7 @@ export default function HomePage() {
       <header className="relative z-40 flex items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex shrink-0 items-center gap-2.5">
           <Mark className="h-9 w-9 drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] sm:h-11 sm:w-11" />
-          <span className="whitespace-nowrap font-sora text-base font-semibold tracking-tight sm:text-lg">Plate Margin</span>
+          <span className="font-sora text-sm font-semibold leading-tight tracking-tight sm:text-base">Kitchen Profit Calculator</span>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <Link href={user ? accountHref : "/login"} className="btn-hero whitespace-nowrap px-3 py-2 text-xs sm:px-3.5 sm:py-2.5 sm:text-sm">

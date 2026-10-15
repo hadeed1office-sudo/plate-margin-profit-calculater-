@@ -8,7 +8,7 @@ const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 
 export const metadata: Metadata = {
-  title: "Plate Margin — Kitchen profit",
+  title: "Kitchen Profit Calculator",
   description: "See menu margin, food cost, and which dishes need a price review. Built for restaurant owners, chefs, and kitchen managers.",
 };
 

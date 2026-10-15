@@ -175,7 +175,7 @@ export default function SignupPage() {
           <Link href="/" className="flex items-center gap-3">
             <Mark className="h-11 w-11" />
             <span>
-              <span className="block font-sora text-lg font-semibold leading-none tracking-tight text-[#F2EBDD]">Plate Margin</span>
+              <span className="block font-sora text-lg font-semibold leading-tight tracking-tight text-[#F2EBDD]">Kitchen Profit Calculator</span>
               <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.22em] text-[#AEB8AF]">Kitchen intelligence</span>
             </span>
           </Link>
@@ -215,7 +215,7 @@ export default function SignupPage() {
         <section className="mx-auto flex h-full min-h-0 w-full max-w-[440px] flex-col justify-center">
           <Link href="/" className="mb-3 flex items-center gap-3 lg:hidden">
             <Mark className="h-10 w-10" />
-            <span className="font-sora text-lg font-semibold text-[#F2EBDD]">Plate Margin</span>
+            <span className="font-sora text-lg font-semibold leading-tight text-[#F2EBDD]">Kitchen Profit Calculator</span>
           </Link>
           <div className="rounded-[28px] border border-white/10 bg-[#0D1812]/85 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-6">
             <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8EAE96]">Create your account</p>
