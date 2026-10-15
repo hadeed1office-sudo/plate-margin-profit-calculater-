@@ -6,7 +6,9 @@ import { PageHeader } from "@/components/ui";
 import { formatMoney, formatPct } from "@/lib/format";
 import { useApp } from "@/lib/store";
 
-const tip = { borderRadius: 12, borderColor: "#E4D8C6", background: "#FFFCF7" };
+const tip = { borderRadius: 12, borderColor: "rgba(221,232,223,0.15)", background: "#0D1812", color: "#F6F3E9" };
+const tick = { fill: "#AEB8AF", fontSize: 12 };
+const grid = "rgba(221,232,223,0.12)";
 
 export default function AnalyticsPage() {
   const { kitchen, metrics } = useApp();
@@ -34,21 +36,21 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="The read"
+        eyebrow="Trends"
         title="Analytics"
-        lede="A short set of charts for price, plate cost, and which dishes are giving up margin."
+        lede="Ingredient costs, recipe costs, and which dishes are giving up margin."
       />
       <section className="grid gap-4 lg:grid-cols-2">
         <ChartCard title="Menu margin and food cost" lede="Blended across weekly covers.">
           {drawn ? (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={metrics.trend}>
-                <CartesianGrid stroke="#EFE6D8" vertical={false} />
-                <XAxis dataKey="date" tick={{ fill: "#6B5E52", fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#6B5E52", fontSize: 12 }} axisLine={false} tickLine={false} width={32} />
+                <CartesianGrid stroke={grid} vertical={false} />
+                <XAxis dataKey="date" tick={tick} axisLine={false} tickLine={false} />
+                <YAxis tick={tick} axisLine={false} tickLine={false} width={32} />
                 <Tooltip formatter={(value) => `${Number(value).toFixed(1)}%`} contentStyle={tip} />
-                <Line type="monotone" dataKey="margin" name="Margin" stroke="#246246" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="foodCost" name="Food cost" stroke="#9A4520" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="margin" name="Margin" stroke="#718C78" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="foodCost" name="Food cost" stroke="#C6954B" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           ) : null}
@@ -57,11 +59,11 @@ export default function AnalyticsPage() {
           {drawn ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dishBars}>
-                <CartesianGrid stroke="#EFE6D8" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: "#6B5E52", fontSize: 10 }} interval={0} angle={-28} height={70} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#6B5E52", fontSize: 12 }} axisLine={false} tickLine={false} width={32} />
+                <CartesianGrid stroke={grid} vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: "#AEB8AF", fontSize: 10 }} interval={0} angle={-28} height={70} axisLine={false} tickLine={false} />
+                <YAxis tick={tick} axisLine={false} tickLine={false} width={32} />
                 <Tooltip formatter={(value) => `${Number(value).toFixed(1)}%`} contentStyle={tip} />
-                <Bar dataKey="margin" name="Margin" fill="#C4622D" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="margin" name="Margin" fill="#718C78" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : null}
@@ -76,11 +78,11 @@ export default function AnalyticsPage() {
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={ingredient.history.map((point) => ({ date: point.date.slice(5), price: point.unitPrice }))}>
-                  <CartesianGrid stroke="#EFE6D8" vertical={false} />
-                  <XAxis dataKey="date" tick={{ fill: "#6B5E52", fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: "#6B5E52", fontSize: 11 }} axisLine={false} tickLine={false} width={48} />
+                  <CartesianGrid stroke={grid} vertical={false} />
+                  <XAxis dataKey="date" tick={{ fill: "#AEB8AF", fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: "#AEB8AF", fontSize: 11 }} axisLine={false} tickLine={false} width={48} />
                   <Tooltip formatter={(value) => formatMoney(Number(value), currency)} contentStyle={tip} />
-                  <Line type="monotone" dataKey="price" name="Unit price" stroke="#2C241C" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="price" name="Unit price" stroke="#DDE8DF" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -91,9 +93,9 @@ export default function AnalyticsPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={spend} layout="vertical" margin={{ left: 24 }}>
                 <XAxis type="number" hide />
-                <YAxis type="category" dataKey="name" width={110} tick={{ fill: "#6B5E52", fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" width={110} tick={tick} axisLine={false} tickLine={false} />
                 <Tooltip formatter={(value) => formatMoney(Number(value), currency)} contentStyle={tip} />
-                <Bar dataKey="cost" name="Weekly cost" fill="#246246" radius={[0, 6, 6, 0]} />
+                <Bar dataKey="cost" name="Weekly cost" fill="#718C78" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : null}
@@ -110,7 +112,7 @@ export default function AnalyticsPage() {
               </span>
             </li>
           ))}
-          {metrics.declining.length === 0 ? <li className="py-3 text-sm text-ink-soft">No declining plates this week.</li> : null}
+          {metrics.declining.length === 0 ? <li className="py-3 text-sm text-ink-soft">No declining dishes this week.</li> : null}
         </ul>
       </section>
     </div>

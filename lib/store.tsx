@@ -21,7 +21,7 @@ import type {
 import { round, slugName, todayISO, uid } from "./format";
 import { BootScreen } from "@/components/boot";
 
-const STORAGE_KEY = "hearthline.v1";
+const STORAGE_KEY = "platemargin.v1";
 
 type Toast = { id: string; text: string };
 
@@ -411,17 +411,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     applyImport: (rows, source) => {
       const book = kitchen;
       if (!book) return { updated: 0, created: 0, recipes: [] as string[] };
+      const unique = new Map<string, (typeof rows)[number]>();
+      for (const row of rows) {
+        const key = slugName(row.name);
+        if (!key || !(row.unitPrice > 0)) continue;
+        unique.set(key, row);
+      }
       let updated = 0;
       let created = 0;
       const touched = new Set<string>();
       let ingredients = [...book.ingredients];
       const today = todayISO();
-      for (const row of rows) {
+      for (const row of unique.values()) {
         const key = slugName(row.name);
-        const index = ingredients.findIndex((item) => {
-          const name = slugName(item.name);
-          return name === key || name.includes(key) || key.includes(name);
-        });
+        if (!key || !(row.unitPrice > 0)) continue;
+        const index = ingredients.findIndex((item) => slugName(item.name) === key);
         if (index >= 0) {
           const item = ingredients[index];
           const history = item.history.some((point) => point.date === today)

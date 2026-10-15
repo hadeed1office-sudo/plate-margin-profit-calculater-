@@ -44,7 +44,7 @@ function RecipesScreen() {
       <PageHeader
         eyebrow="Recipe box"
         title="Recipes"
-        lede="Build a card per plate or per batch. Cost updates from the latest pantry prices."
+        lede="Name the dish, list the ingredients, and watch the cost update from the latest prices."
         actions={<button className="btn-primary" onClick={() => setOpenId("new")}>New recipe card</button>}
       />
       <input className="field mb-4 max-w-sm" placeholder="Search recipe cards" value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search recipes" />
@@ -53,7 +53,7 @@ function RecipesScreen() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {cards.map(({ recipe, dish }) => (
-            <button key={recipe.id} onClick={() => setOpenId(recipe.id)} className="card card-hover p-5 text-left">
+            <button key={recipe.id} onClick={() => setOpenId(recipe.id)} className="card card-hover bg-soft p-5 text-left">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.14em] text-ink-soft">{stationLabel(recipe.station)}</p>
@@ -162,11 +162,10 @@ function RecipeDrawer({
   const margin = Number.isFinite(selling) ? marginOf(selling, costing.plateCost) : null;
 
   return (
-    <Drawer open={open} wide title={recipe ? recipe.name : "New recipe card"} subtitle="Quantities can use kg, g, litre, ml, or pieces." onClose={onClose}>
-      <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-        <form
-          className="space-y-4"
-          onSubmit={(event) => {
+    <Drawer open={open} wide title={recipe ? recipe.name : "New recipe"} subtitle="Quantities can use kg, g, litre, ml, or pieces." onClose={onClose}>
+      <form
+        className="grid gap-5 xl:grid-cols-[0.9fr_1.15fr_0.8fr]"
+        onSubmit={(event) => {
             event.preventDefault();
             if (!name.trim()) return setError("Name the dish.");
             if (!lines.length) return setError("Add at least one ingredient.");
@@ -187,32 +186,60 @@ function RecipeDrawer({
               { sellingPrice: Number.isFinite(sellingPrice) ? sellingPrice : 0, onMenu, weeklyCovers: Math.max(0, Number(covers) || 0) },
             );
           }}
-        >
-          <Field label="Dish name">
+      >
+        <div className="space-y-4 rounded-2xl bg-soft p-4">
+          <Field label="Recipe name">
             <input className="field" value={name} onChange={(event) => setName(event.target.value)} />
           </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Station">
-              <select className="field" value={station} onChange={(event) => setStation(event.target.value as Station)}>
-                {STATIONS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-              </select>
-            </Field>
-            <Field label="This card makes">
-              <select className="field" value={yieldType} onChange={(event) => setYieldType(event.target.value as "plate" | "batch")}>
-                <option value="plate">One plate</option>
-                <option value="batch">A batch</option>
-              </select>
-            </Field>
-          </div>
+          <Field label="Category">
+            <select className="field" value={station} onChange={(event) => setStation(event.target.value as Station)}>
+              {STATIONS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+            </select>
+          </Field>
+          <Field label="Serving">
+            <select className="field" value={yieldType} onChange={(event) => setYieldType(event.target.value as "plate" | "batch")}>
+              <option value="plate">One serving</option>
+              <option value="batch">A batch</option>
+            </select>
+          </Field>
           {yieldType === "batch" ? (
-            <Field label="Plates in the batch">
+            <Field label="Servings in the batch">
               <input className="field num" inputMode="decimal" value={yieldCount} onChange={(event) => setYieldCount(event.target.value)} />
             </Field>
           ) : null}
-          <div className="space-y-2">
+          <Field label="Selling price">
+            <input className="field num" inputMode="decimal" value={price} onChange={(event) => setPrice(event.target.value)} />
+          </Field>
+          <Field label="Covers per week" hint="Used to blend the menu margin.">
+            <input className="field num" inputMode="numeric" value={covers} onChange={(event) => setCovers(event.target.value)} />
+          </Field>
+          <Field label="Kitchen note">
+            <textarea className="field min-h-20" value={notes} onChange={(event) => setNotes(event.target.value)} />
+          </Field>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={onMenu} onChange={(event) => setOnMenu(event.target.checked)} />
+            Show this on the menu
+          </label>
+          {error ? <p className="text-sm text-chili" role="alert">{error}</p> : null}
+          <button className="btn-primary w-full" type="submit">Save recipe</button>
+          {recipe ? (
+            <button type="button" className="btn-danger w-full" onClick={() => onDelete(recipe.id)}>
+              Delete recipe
+            </button>
+          ) : null}
+        </div>
+        <div className="space-y-2">
             <p className="label">Ingredients</p>
+            <div className="hidden grid-cols-[1.4fr_0.6fr_0.55fr_0.7fr_0.7fr_auto] gap-2 px-1 text-xs text-muted sm:grid">
+              <span>Ingredient</span>
+              <span>Quantity</span>
+              <span>Unit</span>
+              <span>Price</span>
+              <span>Cost</span>
+              <span />
+            </div>
             {lines.map((line, index) => (
-              <div key={line.key} className="grid grid-cols-[1.4fr_0.7fr_0.7fr_auto] gap-2">
+              <div key={line.key} className="grid grid-cols-1 gap-2 sm:grid-cols-[1.4fr_0.6fr_0.55fr_0.7fr_0.7fr_auto]">
                 <select
                   className="field"
                   aria-label={`Ingredient ${index + 1}`}
@@ -234,6 +261,11 @@ function RecipeDrawer({
                 <select className="field" aria-label="Unit" value={line.unit} onChange={(event) => setLines((current) => current.map((item) => item.key === line.key ? { ...item, unit: event.target.value as Unit } : item))}>
                   {UNITS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
                 </select>
+                <span className="num self-center text-sm text-ink-soft">{(() => {
+                  const ingredient = ingredients.find((item) => item.id === line.ingredientId);
+                  return ingredient ? formatMoney(ingredient.unitPrice, currency) : "—";
+                })()}</span>
+                <span className="num self-center text-sm">{costing.lines[index]?.mismatch ? "—" : formatMoney(costing.lines[index]?.cost ?? 0, currency)}</span>
                 <button type="button" className="btn-quiet !px-3" aria-label="Remove line" onClick={() => setLines((current) => current.filter((item) => item.key !== line.key))}>
                   ✕
                 </button>
@@ -250,36 +282,18 @@ function RecipeDrawer({
             >
               Add ingredient
             </button>
-            {ingredients.length === 0 ? <p className="text-sm text-chili">Add pantry items before building a card.</p> : null}
-          </div>
-          <Field label="Pass note">
-            <textarea className="field min-h-20" value={notes} onChange={(event) => setNotes(event.target.value)} />
-          </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Selling price">
-              <input className="field num" inputMode="decimal" value={price} onChange={(event) => setPrice(event.target.value)} />
-            </Field>
-            <Field label="Covers per week" hint="Used only to blend the menu margin.">
-              <input className="field num" inputMode="numeric" value={covers} onChange={(event) => setCovers(event.target.value)} />
-            </Field>
-          </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={onMenu} onChange={(event) => setOnMenu(event.target.checked)} />
-            Show this on the menu
-          </label>
-          {error ? <p className="text-sm text-chili" role="alert">{error}</p> : null}
-          <button className="btn-primary w-full" type="submit">Save recipe card</button>
-          {recipe ? (
-            <button type="button" className="btn-danger w-full" onClick={() => onDelete(recipe.id)}>
-              Delete card
-            </button>
-          ) : null}
-        </form>
-        <aside className="h-fit rounded-2xl border border-line bg-white p-4 lg:sticky lg:top-0">
+            {ingredients.length === 0 ? <p className="text-sm text-chili">Add ingredients before building a recipe.</p> : null}
+        </div>
+        <aside className="h-fit rounded-2xl border border-line bg-card p-4 xl:sticky xl:top-0">
           <p className="eyebrow">Live cost</p>
-          <p className="num mt-2 text-4xl">{formatMoney(costing.plateCost, currency)}</p>
-          <p className="text-xs text-ink-soft">per plate{yieldType === "batch" ? ` · batch ${formatMoney(costing.batchCost, currency)}` : ""}</p>
-          <p className="mt-3 text-sm">Margin {margin == null ? "—" : formatPct(margin)}</p>
+          <dl className="mt-3 space-y-2 text-sm">
+            <SummaryRow label="Total recipe cost" value={formatMoney(yieldType === "batch" ? costing.batchCost : costing.plateCost, currency)} />
+            <SummaryRow label="Cost per serving" value={formatMoney(costing.plateCost, currency)} />
+            <SummaryRow label="Selling price" value={Number.isFinite(selling) ? formatMoney(selling, currency) : "—"} />
+            <SummaryRow label="Gross profit" value={margin == null ? "—" : formatMoney(selling - costing.plateCost, currency)} />
+            <SummaryRow label="Margin" value={margin == null ? "—" : formatPct(margin)} />
+            <SummaryRow label="Food cost" value={Number.isFinite(selling) && selling > 0 ? formatPct((costing.plateCost / selling) * 100) : "—"} />
+          </dl>
           {costing.incomplete ? <p className="mt-2 text-xs text-chili">One line uses a unit that cannot convert. That line is excluded.</p> : null}
           <ul className="mt-4 space-y-2 text-sm">
             {costing.lines.map((line) => (
@@ -290,8 +304,17 @@ function RecipeDrawer({
             ))}
           </ul>
         </aside>
-      </div>
+      </form>
     </Drawer>
+  );
+}
+
+function SummaryRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <dt className="text-ink-soft">{label}</dt>
+      <dd className="num font-semibold text-ink">{value}</dd>
+    </div>
   );
 }
 

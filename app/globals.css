@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html {
@@ -12,20 +12,26 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: #f3eee6;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(196, 98, 45, 0.08), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(36, 98, 70, 0.06), transparent 46%);
-  color: #1c1712;
+  background-color: #07100c;
+  color: #f6f3e9;
+  font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  color: #f2ebdd;
 }
 
 ::selection {
-  background: #f6e7c1;
-  color: #1c1712;
+  background: rgba(113, 140, 120, 0.45);
+  color: #f6f3e9;
 }
 
 :focus-visible {
-  outline: 2px solid #9a4520;
+  outline: 2px solid #718c78;
   outline-offset: 2px;
 }
 
@@ -40,15 +46,16 @@ body {
 
   .card-hover:hover {
     transform: translateY(-2px);
-    box-shadow: 0 16px 40px rgba(44, 36, 28, 0.1);
+    border-color: rgba(221, 232, 223, 0.28);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 24px rgba(113, 140, 120, 0.12);
   }
 
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-copper;
+    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-brand;
   }
 
   .field {
-    @apply w-full rounded-xl border border-line bg-white px-3 py-2.5 text-sm text-ink shadow-sm outline-none transition placeholder:text-[#aa9c8c] focus:border-copper;
+    @apply w-full rounded-xl border border-line bg-canvas px-3 py-2.5 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:shadow-[0_0_0_3px_rgba(113,140,120,0.35)];
   }
 
   .label {
@@ -56,43 +63,86 @@ body {
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
   }
 
   .btn-primary {
-    @apply btn bg-copper text-white hover:bg-[#833918];
+    @apply btn bg-brand text-cream shadow-sm hover:bg-brand-dark;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 12px 26px rgba(79, 104, 87, 0.38);
   }
 
   .btn-quiet {
-    @apply btn border border-line bg-white text-ink hover:bg-butter/60;
+    @apply btn border border-line bg-mist text-cream hover:border-brand hover:bg-soft;
+  }
+
+  .btn-quiet:hover:not(:disabled) {
+    box-shadow: 0 10px 22px rgba(79, 104, 87, 0.16);
   }
 
   .btn-ghost {
-    @apply btn text-ink-soft hover:bg-black/5 hover:text-ink;
+    @apply btn text-ink-soft hover:bg-mist hover:text-ink;
   }
 
   .btn-danger {
-    @apply btn bg-chili text-white hover:bg-[#862920];
+    @apply btn bg-chili text-cream hover:bg-[#b2574f];
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    box-shadow: 0 12px 26px rgba(198, 107, 98, 0.34);
+  }
+
+  .btn-hero {
+    @apply btn border border-[#DDE8DF]/35 bg-transparent text-[#F6F1E6];
+  }
+
+  .btn-hero:hover:not(:disabled) {
+    border-color: #e7f0e4;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(221, 232, 223, 0.18);
   }
 
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold;
+    @apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold;
   }
 }
 
 .num {
   font-variant-numeric: tabular-nums;
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+table thead {
+  background: rgba(221, 232, 223, 0.04);
+}
+
+table tbody tr {
+  transition: background-color 150ms ease;
+}
+
+table tbody tr:hover {
+  background: rgba(113, 140, 120, 0.1);
 }
 
 .rise {
-  animation: rise 0.45s ease both;
+  animation: rise 0.22s ease both;
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -100,13 +150,119 @@ body {
   }
 }
 
-.ticket-rule {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 31px,
-    rgba(228, 216, 198, 0.9) 32px
-  );
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.float-label {
+  animation: drift 6.5s ease-in-out infinite;
+}
+
+.ingredient-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.feature-tile {
+  transition: transform 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.feature-tile:hover {
+  transform: translateY(-4px);
+  background: rgba(113, 140, 120, 0.16);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), 0 0 22px rgba(113, 140, 120, 0.32);
+}
+
+.ingredient-pop:hover .ingredient-card {
+  transform: translateY(-8px) scale(1.16);
+  border-color: rgba(231, 240, 228, 0.95);
+  background: rgba(16, 22, 18, 0.94);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 28px rgba(113, 140, 120, 0.7);
+}
+
+.hero-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 8%, #000 100%),
+    linear-gradient(180deg, transparent 0%, #000 7%, #000 88%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 8%, #000 100%),
+    linear-gradient(180deg, transparent 0%, #000 7%, #000 88%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.hero-line {
+  stroke-dasharray: 3 2;
+  animation: line-glow 4.5s ease-in-out infinite;
+}
+
+@keyframes line-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.signup-step {
+  animation: signup-in 0.38s ease;
+}
+
+.nav-item {
+  color: #aeb8af;
+  transition: transform 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+}
+
+.nav-item svg {
+  transition: color 0.22s ease, filter 0.22s ease, transform 0.22s ease;
+}
+
+.nav-item:hover {
+  transform: translateX(6px);
+  background: rgba(113, 140, 120, 0.18);
+  color: #f6f3e9;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28), 0 0 18px rgba(113, 140, 120, 0.38);
+}
+
+.nav-item:hover svg {
+  color: #dde8df;
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 8px rgba(169, 195, 174, 0.95));
+}
+
+.nav-item-active {
+  background: rgba(113, 140, 120, 0.22);
+  color: #f6f3e9;
+  box-shadow: 0 0 24px rgba(113, 140, 120, 0.2);
+}
+
+.nav-item-active svg {
+  color: #dde8df;
+}
+
+.flow-chip:hover {
+  transform: translateY(-4px);
+}
+
+@keyframes signup-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -114,7 +270,15 @@ body {
     scroll-behavior: auto;
   }
   .rise,
-  .card-hover {
+  .card-hover,
+  .float-label,
+  .hero-line,
+  .feature-tile,
+  .ingredient-card,
+  .btn,
+  .signup-step,
+  .flow-chip,
+  .nav-item {
     animation: none !important;
     transition: none !important;
   }
@@ -125,6 +289,90 @@ body {
   width: 8px;
 }
 .scroll-thin::-webkit-scrollbar-thumb {
-  background: #e4d8c6;
+  background: rgba(221, 232, 223, 0.22);
   border-radius: 99px;
+}
+
+.app-atmosphere {
+  position: relative;
+  isolation: isolate;
+  background-color: #07100c;
+}
+
+.app-atmosphere::before {
+  content: "";
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  background-image: url("/hero/kitchen-bg.jpg");
+  background-size: 148% auto;
+  background-position: 70% 18%;
+  filter: saturate(1.15) brightness(1.05);
+}
+
+.app-atmosphere::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(7, 16, 12, 0.28) 0%, rgba(7, 16, 12, 0.08) 55%, transparent 100%);
+}
+
+.kitchen-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.kitchen-leaf {
+  position: absolute;
+  background-image: url("/hero/kitchen-bg.jpg");
+  background-repeat: no-repeat;
+  filter: saturate(1.2) brightness(1.08) contrast(1.05);
+}
+
+.kitchen-leaf-corner {
+  left: 168px;
+  bottom: 0;
+  width: 460px;
+  height: 340px;
+  background-size: 860px auto;
+  background-position: 0% 100%;
+  -webkit-mask-image: radial-gradient(ellipse at 10% 90%, #000 48%, transparent 82%);
+  mask-image: radial-gradient(ellipse at 10% 90%, #000 48%, transparent 82%);
+}
+
+.kitchen-leaf-footer {
+  left: 30%;
+  bottom: 0;
+  width: 820px;
+  height: 250px;
+  background-size: 1000px auto;
+  background-position: 48% 100%;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 100%, #000 46%, transparent 84%);
+  mask-image: radial-gradient(ellipse at 50% 100%, #000 46%, transparent 84%);
+}
+
+.kitchen-plate {
+  position: absolute;
+  top: 7.75rem;
+  right: 0.25rem;
+  width: 420px;
+  height: 290px;
+  max-width: none;
+  object-fit: cover;
+  object-position: 71% 56%;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 84% 80% at 58% 48%, #000 46%, transparent 78%);
+  mask-image: radial-gradient(ellipse 84% 80% at 58% 48%, #000 46%, transparent 78%);
+}
+
+.app-atmosphere .card {
+  position: relative;
+  z-index: 1;
+  background-color: #0c1611;
+  backdrop-filter: none;
 }

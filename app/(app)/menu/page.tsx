@@ -9,7 +9,7 @@ import { useApp } from "@/lib/store";
 
 export default function MenuPage() {
   const { kitchen, metrics, updateMenuItem, toast } = useApp();
-  const [filter, setFilter] = useState<"all" | "risk" | "healthy">("all");
+  const [filter, setFilter] = useState<"all" | "healthy" | "attention" | "below">("all");
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -32,7 +32,8 @@ export default function MenuPage() {
   const dishes = useMemo(() => {
     if (!metrics) return [];
     const list = [...metrics.onMenu].sort((a, b) => (a.margin ?? 999) - (b.margin ?? 999));
-    if (filter === "risk") return list.filter((dish) => dish.status === "warning" || dish.status === "critical");
+    if (filter === "attention") return list.filter((dish) => dish.status === "warning");
+    if (filter === "below") return list.filter((dish) => dish.status === "critical");
     if (filter === "healthy") return list.filter((dish) => dish.status === "healthy");
     return list;
   }, [metrics, filter]);
@@ -43,15 +44,16 @@ export default function MenuPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="The board"
+        eyebrow="Menu"
         title="Menu"
-        lede="Change a selling price and the profit, margin, and food cost update before you leave the card."
+        lede="Change a selling price and the profit, margin, and food cost update on the card."
       />
       <div className="mb-4 flex flex-wrap gap-2">
         {([
-          ["all", "All plates"],
-          ["risk", "Under the floor"],
-          ["healthy", "Holding"],
+          ["all", "All"],
+          ["healthy", "Healthy"],
+          ["attention", "Needs attention"],
+          ["below", "Below target"],
         ] as const).map(([id, label]) => (
           <button key={id} className={filter === id ? "btn-primary !py-2" : "btn-quiet !py-2"} onClick={() => setFilter(id)}>
             {label}

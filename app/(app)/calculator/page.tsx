@@ -53,9 +53,9 @@ export default function CalculatorPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="The scale"
+        eyebrow="Calculator"
         title="Profit calculator"
-        lede="Move a quantity, a price, or the selling price. The plate answers immediately. Nothing is saved until you apply it to the menu."
+        lede="Move a quantity or the selling price. Profit, food cost, and margin update immediately. Nothing is saved until you apply it to the menu."
       />
       <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="card space-y-4 p-5">
@@ -76,7 +76,7 @@ export default function CalculatorPage() {
             {lines.map((line) => {
               const ingredient = kitchen.ingredients.find((item) => item.id === line.ingredientId);
               return (
-                <div key={line.key} className="grid gap-2 rounded-xl border border-line bg-white p-3 md:grid-cols-4">
+                <div key={line.key} className="grid gap-2 rounded-xl border border-line bg-card p-3 md:grid-cols-4">
                   <p className="text-sm font-medium md:col-span-4">{ingredient?.name}</p>
                   <label className="text-xs text-ink-soft">
                     Quantity

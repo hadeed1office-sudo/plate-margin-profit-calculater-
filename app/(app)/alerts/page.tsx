@@ -4,26 +4,42 @@ import Link from "next/link";
 import { useState } from "react";
 import { PageHeader, SeverityPill } from "@/components/ui";
 import { useApp } from "@/lib/store";
-import type { Severity } from "@/lib/types";
+
+type AlertFilter = "all" | "unread" | "critical" | "ingredient" | "recipe" | "margin";
 
 export default function AlertsPage() {
   const { metrics, dismissAlert, restoreAlerts } = useApp();
-  const [filter, setFilter] = useState<"all" | Severity>("all");
+  const [filter, setFilter] = useState<AlertFilter>("all");
+  const [read, setRead] = useState<string[]>([]);
   if (!metrics) return null;
-  const alerts = metrics.alerts.filter((alert) => (filter === "all" ? true : alert.severity === filter));
+  const alerts = metrics.alerts.filter((alert) => {
+    if (filter === "unread") return !read.includes(alert.id);
+    if (filter === "critical") return alert.severity === "critical";
+    if (filter === "ingredient") return /ingredient|pantry|price eased/i.test(`${alert.tag} ${alert.title}`);
+    if (filter === "recipe") return /recipe/i.test(`${alert.tag} ${alert.title} ${alert.detail}`);
+    if (filter === "margin") return /margin|floor|price/i.test(`${alert.tag} ${alert.detail}`);
+    return true;
+  });
 
   return (
     <div>
       <PageHeader
-        eyebrow="Pass notes"
+        eyebrow="Alerts"
         title="Alerts"
-        lede="Critical means act before service. Warning means the plate or the price is drifting. Healthy is a note worth keeping."
+        lede="Each note says what changed, why it matters, and which dish or ingredient to open next."
         actions={<button className="btn-quiet" onClick={() => restoreAlerts()}>Restore dismissed</button>}
       />
       <div className="mb-4 flex flex-wrap gap-2">
-        {(["all", "critical", "warning", "healthy"] as const).map((item) => (
-          <button key={item} className={filter === item ? "btn-primary !py-2 capitalize" : "btn-quiet !py-2 capitalize"} onClick={() => setFilter(item)}>
-            {item}
+        {([
+          ["all", "All"],
+          ["unread", "Unread"],
+          ["critical", "Critical"],
+          ["ingredient", "Ingredient"],
+          ["recipe", "Recipe"],
+          ["margin", "Margin"],
+        ] as const).map(([id, label]) => (
+          <button key={id} className={filter === id ? "btn-primary !py-2" : "btn-quiet !py-2"} onClick={() => setFilter(id)}>
+            {label}
           </button>
         ))}
       </div>
@@ -37,8 +53,12 @@ export default function AlertsPage() {
               </div>
               <h2 className="mt-2 font-display text-2xl leading-tight">{alert.title}</h2>
               <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink-soft">{alert.detail}</p>
-              <Link href={alert.href} className="mt-2 inline-block text-sm font-semibold text-copper">
-                Open the related board
+              <Link
+                href={alert.href}
+                className="mt-2 inline-block text-sm font-semibold text-brand-soft"
+                onClick={() => setRead((current) => (current.includes(alert.id) ? current : [...current, alert.id]))}
+              >
+                {alert.href.includes("recipe") ? "Review recipe" : alert.href.includes("ingredient") ? "Review ingredient" : "Review menu"}
               </Link>
             </div>
             <button className="btn-quiet shrink-0" onClick={() => dismissAlert(alert.id)}>

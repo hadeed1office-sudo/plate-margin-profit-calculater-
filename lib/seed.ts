@@ -1,7 +1,7 @@
 import type { CurrencyCode, Ingredient, IngredientCategory, KitchenData, KitchenProfile, MenuItem, Recipe, Unit } from "./types";
 import { convertAmount, isoDate, round } from "./format";
 
-export const DEMO_EMAIL = "chef@hearthline.kitchen";
+export const DEMO_EMAIL = "chef@platemargin.app";
 export const DEMO_PASSWORD = "service123";
 export const DEMO_KITCHEN_ID = "kit_copper";
 

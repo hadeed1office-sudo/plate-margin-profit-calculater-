@@ -1,19 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Mono, Fraunces, Outfit } from "next/font/google";
+import { Inter, Manrope, Sora } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
-const mono = DM_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 
 export const metadata: Metadata = {
-  title: "Hearthline — Kitchen profit intelligence",
-  description: "Watch ingredient prices, recipe costs, menu prices, and plate margins for a working restaurant kitchen.",
+  title: "Plate Margin — Kitchen profit",
+  description: "See menu margin, food cost, and which dishes need a price review. Built for restaurant owners, chefs, and kitchen managers.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2C241C",
+  themeColor: "#07100C",
   width: "device-width",
   initialScale: 1,
 };
@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${fraunces.variable} ${mono.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${sora.variable} ${manrope.variable} font-sans antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

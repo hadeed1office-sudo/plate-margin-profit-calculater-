@@ -39,7 +39,7 @@ export function Tip({ text }: { text: string }) {
       i
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-30 hidden w-56 -translate-x-1/2 rounded-xl bg-walnut px-3 py-2 text-left text-xs font-medium normal-case leading-relaxed tracking-normal text-paper group-hover:block group-focus:block"
+        className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-30 hidden w-56 -translate-x-1/2 rounded-xl border border-line bg-card px-3 py-2 text-left text-xs font-medium normal-case leading-relaxed tracking-normal text-cream group-hover:block group-focus:block"
       >
         {text}
       </span>
@@ -49,13 +49,18 @@ export function Tip({ text }: { text: string }) {
 
 export function SeverityPill({ status }: { status: "critical" | "warning" | "healthy" | "unset" }) {
   const map = {
-    critical: { label: "Critical", className: "bg-chili-soft text-chili" },
-    warning: { label: "Warning", className: "bg-brass-soft text-brass" },
-    healthy: { label: "Healthy", className: "bg-sage-soft text-sage" },
-    unset: { label: "Set a price", className: "bg-paper text-ink-soft" },
+    critical: { label: "Critical", className: "bg-chili-soft text-chili", icon: "!" },
+    warning: { label: "Warning", className: "bg-brass-soft text-brass", icon: "▲" },
+    healthy: { label: "Healthy", className: "bg-sage-soft text-sage", icon: "✓" },
+    unset: { label: "Set a price", className: "bg-mist text-ink-soft", icon: "–" },
   } as const;
   const item = map[status];
-  return <span className={`chip ${item.className}`}>{item.label}</span>;
+  return (
+    <span className={`chip ${item.className}`}>
+      <span aria-hidden="true">{item.icon}</span>
+      {item.label}
+    </span>
+  );
 }
 
 export function ChangePill({ value, invert = false }: { value: number | null; invert?: boolean }) {
@@ -79,11 +84,14 @@ export function EmptyState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="card px-6 py-14 text-center">
-      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-copper-bright/50 bg-butter/40">
-        <span className="font-display text-2xl text-copper">∅</span>
+    <div className="rounded-2xl border border-line bg-card px-6 py-14 text-center shadow-card">
+      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/20 text-brand-soft shadow-[0_0_24px_rgba(113,140,120,0.2)]">
+        <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+          <path d="M12 21c-4-3.2-7-6.4-7-10a7 7 0 0 1 14 0c0 3.6-3 6.8-7 10Z" />
+          <path d="M12 11V7" />
+        </svg>
       </div>
-      <h3 className="font-display text-2xl text-ink">{title}</h3>
+      <h3 className="font-sora text-2xl font-semibold text-cream">{title}</h3>
       <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-ink-soft">{body}</p>
       {action ? <div className="mt-5">{action}</div> : null}
     </div>
@@ -105,7 +113,7 @@ export function PageHeader({
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h1 className="mt-1 font-display text-4xl tracking-tight text-ink md:text-[2.6rem]">{title}</h1>
+        <h1 className="mt-1 font-sora text-[1.75rem] font-semibold tracking-tight text-cream md:text-[2rem]">{title}</h1>
         {lede ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft md:text-base">{lede}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
@@ -144,16 +152,16 @@ export function Drawer({
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
-      <button className="absolute inset-0 bg-[#1c1712]/40" aria-label="Close panel" onClick={onClose} />
+      <button className="absolute inset-0 bg-black/60" aria-label="Close panel" onClick={onClose} />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`relative flex h-full w-full flex-col bg-paper shadow-lift ${wide ? "max-w-3xl" : "max-w-lg"}`}
+        className={`relative flex h-full w-full flex-col bg-card shadow-lift ${wide ? "max-w-5xl" : "max-w-lg"}`}
       >
         <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
           <div>
-            <h2 className="font-display text-2xl">{title}</h2>
+            <h2 className="font-sora text-2xl font-semibold text-cream">{title}</h2>
             {subtitle ? <p className="mt-1 text-sm text-ink-soft">{subtitle}</p> : null}
           </div>
           <button className="btn-quiet !px-2.5" onClick={onClose} aria-label="Close">
@@ -175,7 +183,7 @@ export function Toaster() {
         <button
           key={item.id}
           onClick={() => dismissToast(item.id)}
-          className="rounded-2xl border border-line bg-walnut px-4 py-3 text-left text-sm text-paper shadow-lift"
+          className="rounded-2xl border border-line bg-card px-4 py-3 text-left text-sm text-ink shadow-lift"
         >
           {item.text}
         </button>

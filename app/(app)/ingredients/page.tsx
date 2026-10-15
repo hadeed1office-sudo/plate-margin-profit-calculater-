@@ -58,7 +58,7 @@ function IngredientsScreen() {
       <PageHeader
         eyebrow="Pantry"
         title="Ingredients"
-        lede="Today's price is the one every recipe uses. Last week stays on the ticket so you can see the move."
+        lede="Today's price is the one every recipe uses. The previous price stays so you can see the move."
         actions={
           <>
             <button className="btn-quiet" onClick={() => router.push("/receiving")}>
@@ -103,8 +103,8 @@ function IngredientsScreen() {
 
       {kitchen.ingredients.length === 0 ? (
         <EmptyState
-          title="The pantry is empty"
-          body="Add an ingredient, receive a spreadsheet, or load the sample service from settings."
+          title="No ingredients yet"
+          body="Add your first ingredient to start calculating recipe costs."
           action={<button className="btn-primary" onClick={() => setCreating(true)}>Add the first ingredient</button>}
         />
       ) : (
@@ -124,7 +124,7 @@ function IngredientsScreen() {
               {moves.map((move) => (
                 <tr
                   key={move.ingredient.id}
-                  className="cursor-pointer border-t border-line hover:bg-butter/40 focus-within:bg-butter/40"
+                  className="cursor-pointer border-t border-line hover:bg-mist focus-within:bg-mist"
                   onClick={() => setEditing(move.ingredient)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
@@ -147,7 +147,7 @@ function IngredientsScreen() {
                   <td className="num px-4 py-3 text-ink-soft">{move.previous == null ? "—" : formatMoney(move.previous, currency)}</td>
                   <td className="px-4 py-3"><ChangePill value={move.changePct} invert /></td>
                   <td className="px-4 py-3">
-                    <Sparkline values={move.ingredient.history.map((point) => point.unitPrice)} tone={ (move.changePct ?? 0) > 0 ? "#9E342C" : "#246246"} />
+                    <Sparkline values={move.ingredient.history.map((point) => point.unitPrice)} tone={(move.changePct ?? 0) > 0 ? "#C66B62" : "#5F8A68"} />
                   </td>
                   <td className="px-4 py-3 text-ink-soft">{move.recipeNames.length}</td>
                 </tr>
@@ -238,7 +238,7 @@ function IngredientDrawer({
   const used = ingredient ? recipes.filter((recipe) => recipe.lines.some((line) => line.ingredientId === ingredient.id)) : [];
 
   return (
-    <Drawer open={open} title={isNew ? "New pantry label" : ingredient?.name ?? "Ingredient"} subtitle="Price per unit is what the recipe card multiplies." onClose={onClose}>
+    <Drawer open={open} title={isNew ? "New ingredient" : ingredient?.name ?? "Ingredient"} subtitle="The unit price is what each recipe multiplies." onClose={onClose}>
       <form
         className="space-y-4"
         onSubmit={(event) => {
@@ -316,7 +316,7 @@ function IngredientDrawer({
           </Field>
           <div>
             <p className="label">Previous prices</p>
-            <div className="max-h-40 space-y-1 overflow-auto rounded-xl border border-line bg-white p-3 text-sm">
+            <div className="max-h-40 space-y-1 overflow-auto rounded-xl border border-line bg-card p-3 text-sm">
               {[...ingredient.history].slice(-8).reverse().map((point) => (
                 <div key={point.date} className="flex justify-between">
                   <span className="text-ink-soft">{point.date}</span>

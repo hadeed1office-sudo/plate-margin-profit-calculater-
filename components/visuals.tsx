@@ -9,7 +9,7 @@ export function PlateGauge({ margin, target }: { margin: number | null; target: 
   const circ = 2 * Math.PI * radius;
   const value = margin == null ? 0 : Math.max(0, Math.min(100, margin));
   const dash = (value / 100) * circ;
-  const tone = margin == null ? "#8D6E32" : margin >= target ? "#246246" : margin >= target - 6 ? "#8D6E32" : "#9E342C";
+  const tone = margin == null ? "#C6954B" : margin >= target ? "#5F8A68" : margin >= target - 6 ? "#C6954B" : "#C66B62";
   const angle = ((target / 100) * 360 - 90) * (Math.PI / 180);
   const cx = size / 2;
   const cy = size / 2;
@@ -19,8 +19,8 @@ export function PlateGauge({ margin, target }: { margin: number | null; target: 
   return (
     <div className="relative" role="img" aria-label={margin == null ? "No blended margin yet" : `Blended margin ${formatPct(margin)}, floor ${formatPct(target, 0)}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={cx} cy={cy} r={radius + 24} fill="#FFFCF7" stroke="#E4D8C6" />
-        <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#EFE6D8" strokeWidth={stroke} />
+        <circle cx={cx} cy={cy} r={radius + 24} fill="#0D1812" stroke="rgba(221,232,223,0.15)" />
+        <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#16261C" strokeWidth={stroke} />
         <circle
           cx={cx}
           cy={cy}
@@ -32,7 +32,7 @@ export function PlateGauge({ margin, target }: { margin: number | null; target: 
           strokeDasharray={`${dash} ${circ - dash}`}
           transform={`rotate(-90 ${cx} ${cy})`}
         />
-        <line x1={tickA.x} y1={tickA.y} x2={tickB.x} y2={tickB.y} stroke="#1C1712" strokeWidth="2" />
+        <line x1={tickA.x} y1={tickA.y} x2={tickB.x} y2={tickB.y} stroke="#DDE8DF" strokeWidth="2" />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-soft">Blended</p>
@@ -43,7 +43,7 @@ export function PlateGauge({ margin, target }: { margin: number | null; target: 
   );
 }
 
-export function Sparkline({ values, tone = "#246246" }: { values: number[]; tone?: string }) {
+export function Sparkline({ values, tone = "#718C78" }: { values: number[]; tone?: string }) {
   if (values.length < 2) return <span className="text-xs text-ink-soft">No trail yet</span>;
   const width = 112;
   const height = 36;
@@ -67,7 +67,7 @@ export function MarginTrack({ margin, target }: { margin: number | null; target:
   const left = margin == null ? 0 : Math.max(0, Math.min(100, margin));
   const tone = margin == null ? "bg-ink-soft" : margin >= target ? "bg-sage" : margin >= target - 6 ? "bg-brass" : "bg-chili";
   return (
-    <div className="relative h-2 rounded-full bg-[#efe6d8]" aria-hidden="true">
+    <div className="relative h-2 rounded-full bg-mist" aria-hidden="true">
       <div className={`absolute inset-y-0 left-0 rounded-full ${tone}`} style={{ width: `${left}%` }} />
       <div className="absolute top-1/2 h-3.5 w-px -translate-y-1/2 bg-ink" style={{ left: `${Math.max(0, Math.min(100, target))}%` }} />
     </div>

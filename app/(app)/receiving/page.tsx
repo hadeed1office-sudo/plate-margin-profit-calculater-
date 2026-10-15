@@ -16,6 +16,7 @@ export default function ReceivingPage() {
   const [reading, setReading] = useState(false);
   const [source, setSource] = useState("Delivery");
   const [result, setResult] = useState<{ updated: number; created: number; recipes: string[] } | null>(null);
+  const [posted, setPosted] = useState(false);
 
   if (!kitchen) return null;
   const currency = kitchen.profile.currency;
@@ -34,7 +35,16 @@ export default function ReceivingPage() {
         const recognized = await Tesseract.recognize(file, "eng");
         const parsed = parseInvoiceText(recognized.data.text || "");
         setRows(parsed);
-        setStatus(parsed.length ? "Check every line before posting. Invoice text is a draft, not a receipt." : "Could not read prices from that photo. Add the lines yourself beside the image.");
+        if (parsed.length) {
+          const summary = applyImport(parsed, file.name);
+          setResult(summary);
+          setPosted(true);
+          setStatus(`${summary.updated} prices updated. ${summary.created} new ingredients added.`);
+          toast("Pantry updated from the invoice.");
+        } else {
+          setPosted(false);
+          setStatus("Could not read prices from that photo. Add the lines yourself beside the image.");
+        }
       } catch {
         setRows([]);
         setStatus("The reader could not open that photo. Add the lines by hand, using the image as the source.");
@@ -52,11 +62,16 @@ export default function ReceivingPage() {
       const headers = records[0] ? Object.keys(records[0]) : [];
       const parsed = rowsFromSheet(headers, records);
       setRows(parsed);
-      setStatus(
-        parsed.length
-          ? `${parsed.length} ${parsed.length === 1 ? "price" : "prices"} ready to review.`
-          : "No price rows found. Use columns named ingredient, unit, and unit_price.",
-      );
+      if (parsed.length) {
+        const summary = applyImport(parsed, file.name);
+        setResult(summary);
+        setPosted(true);
+        setStatus(`${summary.updated} prices updated. ${summary.created} new ingredients added.`);
+        toast("Pantry updated from the file.");
+      } else {
+        setPosted(false);
+        setStatus("No price rows found. Use columns named ingredient, unit, and unit_price.");
+      }
     } catch {
       setStatus("That file could not be read. Use CSV, Excel, or a photo of the invoice.");
     }
@@ -66,8 +81,8 @@ export default function ReceivingPage() {
     <div className="space-y-5">
       <PageHeader
         eyebrow="Receiving"
-        title="Deliveries & price files"
-        lede="Drop a spreadsheet of daily rates or a photo of an invoice. Nothing hits the pantry until you post it."
+        title="Upload rate invoices"
+        lede="Drop a rate invoice, an Excel file, or a CSV. Matching ingredients get the new price. A name that is not in the pantry is added once."
         actions={
           <a className="btn-quiet" href="/samples/pantry-prices.csv" download>
             Download example file
@@ -75,7 +90,7 @@ export default function ReceivingPage() {
         }
       />
       <label
-        className="card flex cursor-pointer flex-col items-center justify-center border-dashed px-6 py-12 text-center"
+        className="card flex cursor-pointer flex-col items-center justify-center border-dashed px-6 py-12 text-center transition duration-200 hover:-translate-y-1 hover:border-[#8EAE96] hover:bg-[#718C78]/10 hover:shadow-[0_16px_40px_rgba(0,0,0,0.28),0_0_24px_rgba(113,140,120,0.28)]"
         onDragOver={(event) => event.preventDefault()}
         onDrop={(event) => {
           event.preventDefault();
@@ -83,15 +98,19 @@ export default function ReceivingPage() {
           if (file) void take(file);
         }}
       >
-        <p className="font-display text-3xl">Drop a file on the pass</p>
-        <p className="mt-2 max-w-md text-sm text-ink-soft">CSV, Excel, or a photo of a supplier invoice. Prices stay in {currency}.</p>
+        <p className="font-sora text-3xl font-semibold text-cream">Drop a rate invoice or price file</p>
+        <p className="mt-2 max-w-md text-sm text-ink-soft">A photo of a supplier invoice, Excel, or CSV. Prices update as soon as the file is read. Names already in the pantry are not added again.</p>
+        <span className="btn-primary mt-6 !rounded-full !px-7 !py-3 shadow-[0_10px_28px_rgba(113,140,120,0.35)]">
+          Choose a file
+        </span>
         <input
-          className="mt-4 text-sm"
+          className="sr-only"
           type="file"
           accept=".csv,.xlsx,.xls,image/png,image/jpeg,image/webp"
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) void take(file);
+            event.target.value = "";
           }}
         />
       </label>
@@ -130,18 +149,17 @@ export default function ReceivingPage() {
             </div>
             <button
               className="btn-primary mt-4"
-              disabled={!rows.some((row) => row.name.trim() && row.unitPrice > 0)}
+              disabled={posted || !rows.some((row) => row.name.trim() && row.unitPrice > 0)}
               onClick={() => {
                 const clean = rows.filter((row) => row.name.trim() && row.unitPrice > 0);
                 const summary = applyImport(clean, source);
                 setResult(summary);
+                setPosted(true);
                 toast("Prices posted. Recipe costs recalculated.");
-                setRows([]);
-                setPreview(null);
-                setStatus("");
+                setStatus(`${summary.updated} prices updated. ${summary.created} new ingredients added.`);
               }}
             >
-              Post these prices
+              {posted ? "Already in the pantry" : "Post any edits"}
             </button>
           </div>
         </div>
@@ -168,6 +186,7 @@ export default function ReceivingPage() {
   );
 
   function edit(index: number, patch: Partial<ImportRow>) {
+    setPosted(false);
     setRows((current) => current.map((row, item) => (item === index ? { ...row, ...patch } : row)));
   }
 }

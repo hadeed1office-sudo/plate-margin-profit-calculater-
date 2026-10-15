@@ -38,7 +38,7 @@ export default function LoginPage() {
   return (
     <AuthFrame
       title="Log in"
-      lede="Pick up the board where service left it."
+      lede="Pick up the kitchen where you left it."
       footer={
         <>
           New kitchen?{" "}
@@ -57,7 +57,7 @@ export default function LoginPage() {
         </Field>
         {error ? <p className="text-sm text-chili" role="alert">{error}</p> : null}
         <button className="btn-primary w-full" disabled={pending}>
-          {pending ? "Checking the pass…" : "Enter the kitchen"}
+          {pending ? "Checking…" : "Enter the kitchen"}
         </button>
         <div className="flex items-center justify-between text-sm">
           <Link href="/forgot-password" className="text-ink-soft underline-offset-2 hover:underline">

@@ -46,7 +46,7 @@ export default function SettingsPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "hearthline-ledger.json";
+    link.download = "plate-margin-kitchen.json";
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -56,7 +56,7 @@ export default function SettingsPage() {
       <PageHeader
         eyebrow="House"
         title="Settings"
-        lede="Currency, the margin floor, and who works the pass. The ledger stays in this browser."
+        lede="Currency, the margin target, and who works in the kitchen. Everything stays in this browser."
       />
       <form onSubmit={saveKitchen} className="card space-y-4 p-5 md:p-6">
         <h2 className="font-display text-2xl">Kitchen</h2>
@@ -82,8 +82,8 @@ export default function SettingsPage() {
           </select>
         </Field>
         <p className="text-xs text-ink-soft">Guide rate: 1 USD ≈ {PER_USD[currency]} {currency}. Treat it as a switch, not a live market feed.</p>
-        <Field label={`Margin floor ${target}%`}>
-          <input type="range" min={45} max={85} value={target} onChange={(event) => setTarget(Number(event.target.value))} className="w-full accent-[#9A4520]" />
+        <Field label={`Target margin ${target}%`}>
+          <input type="range" min={45} max={85} value={target} onChange={(event) => setTarget(Number(event.target.value))} className="w-full accent-[#718C78]" />
         </Field>
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="Warn when a price moves by (%)">

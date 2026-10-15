@@ -59,7 +59,7 @@ export default function OnboardingPage() {
       </div>
       <ol className="mt-8 grid grid-cols-3 gap-2">
         {steps.map((label, index) => (
-          <li key={label} className={`rounded-2xl border px-3 py-3 ${index === step ? "border-copper bg-white" : index < step ? "border-sage/30 bg-sage-soft" : "border-line bg-card"}`}>
+          <li key={label} className={`rounded-2xl border px-3 py-3 ${index === step ? "border-copper bg-card" : index < step ? "border-sage/30 bg-sage-soft" : "border-line bg-card"}`}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">0{index + 1}</p>
             <p className="mt-1 font-medium">{label}</p>
           </li>
@@ -95,8 +95,8 @@ export default function OnboardingPage() {
                 ))}
               </select>
             </Field>
-            <Field label={`Margin floor ${target}%`} hint="A plate under this profit margin is marked for review. Food cost is what remains of the selling price.">
-              <input type="range" min={45} max={85} value={target} onChange={(event) => setTarget(Number(event.target.value))} className="w-full accent-[#9A4520]" />
+            <Field label={`Target margin ${target}%`} hint="A dish under this profit margin is marked for review. Food cost is the share of the selling price.">
+              <input type="range" min={45} max={85} value={target} onChange={(event) => setTarget(Number(event.target.value))} className="w-full accent-[#718C78]" />
             </Field>
           </div>
         ) : null}
@@ -107,11 +107,11 @@ export default function OnboardingPage() {
               The sample service is a fictional grill kitchen with live prices, recipe cards, and a few plates already under the floor. You can edit or clear every line.
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <button type="button" onClick={() => setSample(true)} className={`rounded-2xl border p-4 text-left ${sample ? "border-copper bg-butter/40" : "border-line bg-white"}`}>
+              <button type="button" onClick={() => setSample(true)} className={`rounded-2xl border p-4 text-left ${sample ? "border-brand bg-brand/15" : "border-line bg-card"}`}>
                 <p className="font-semibold">Load a sample service</p>
                 <p className="mt-1 text-sm text-ink-soft">Twelve plates, a full pantry, and price movement from the last three weeks.</p>
               </button>
-              <button type="button" onClick={() => setSample(false)} className={`rounded-2xl border p-4 text-left ${!sample ? "border-copper bg-butter/40" : "border-line bg-white"}`}>
+              <button type="button" onClick={() => setSample(false)} className={`rounded-2xl border p-4 text-left ${!sample ? "border-brand bg-brand/15" : "border-line bg-card"}`}>
                 <p className="font-semibold">Empty pantry</p>
                 <p className="mt-1 text-sm text-ink-soft">Start from a blank board and add your own ingredients.</p>
               </button>
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
             </button>
           ) : (
             <button className="btn-primary" type="button" onClick={finish}>
-              Open the pass
+              Open the kitchen
             </button>
           )}
         </div>
